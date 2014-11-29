@@ -1,0 +1,27 @@
+(define (make-symbol-table)
+  '())
+;; (define (update-symbol-table t s)
+;;   (cond ((assoc s t) => (lambda (entry) (set-cdr! entry (+ (cdr entry) 1))))
+;;         (else (cons (cons s 1) t))))
+(define (update-symbol-table t s)
+  (if (member s t)
+      t
+      (cons s t)))
+(define (lookup-symbol-table t s)
+  (let loop ((t t)
+             (i 0))
+    (if (null? t)
+        #f
+        (if (eq? (car t) s)
+            i
+            (loop (cdr t) (+ i 1))))))
+
+(define (build-symbol-table s)
+  (let ((t (make-symbol-table)))
+    (let loop ((s s))
+      (cond ((symbol? s)
+             (set! t (update-symbol-table t s)))
+            ((pair? s)
+             (loop (car s))
+             (loop (cdr s)))))
+    t))
